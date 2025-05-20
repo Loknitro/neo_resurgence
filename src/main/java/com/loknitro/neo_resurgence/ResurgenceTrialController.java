@@ -1,7 +1,6 @@
 package com.loknitro.neo_resurgence;
 
 import javafx.animation.*;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
@@ -16,7 +15,7 @@ import java.util.Objects;
 import java.util.Random;
 
 
-public class TestController {
+public class ResurgenceTrialController {
 
     double[] squareMoveSegments = new double[4];
     boolean horizontal = false;
@@ -24,7 +23,8 @@ public class TestController {
     private final AudioClip errorSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/erou.mp3")).toExternalForm());
     private final AudioClip scoreSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/point.mp3")).toExternalForm());
     private final AudioClip circleHoldSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/circle_hold.wav")).toExternalForm());
-    private boolean success = false;
+    private boolean circleSuccess = false;
+    private boolean squareSuccess = false;
 
     @FXML
     private AnchorPane blackOverlay;
@@ -39,9 +39,7 @@ public class TestController {
     private Label scoreLabel;
     private final Random random = new Random();
     private int score = 0;
-
-    //TODO:Implement squareDragTimer
-    private static final PauseTransition squareDragTimer = new PauseTransition(Duration.seconds(1.5));
+    private static final PauseTransition squareDragTimer = new PauseTransition(Duration.seconds(1));
     private static final PauseTransition circleHoldTimer = new PauseTransition(Duration.seconds(3));
     private static final PauseTransition blackScreenTimer = new PauseTransition(Duration.seconds(3));
     @FXML
@@ -50,12 +48,19 @@ public class TestController {
     @FXML
     public void initialize() {
         positionShapesRandomly();
-        circleHoldTimer.setOnFinished(e -> {
-            success = true;
-            scoreSound.play();
-            score++;
-            scoreLabel.setText("Pontos: " + score);
+        blackScreenTimer.setOnFinished(e -> {
+            blackOverlay.setVisible(false);
             positionShapesRandomly();
+        });
+        circleHoldTimer.setOnFinished(e -> {
+            circleSuccess = true;
+            score();
+            positionShapesRandomly();
+        });
+        squareDragTimer.setOnFinished(e -> {
+            if (!squareSuccess) {
+                blackScreen();
+            }
         });
     }
     //Circle behavior - start
@@ -63,7 +68,7 @@ public class TestController {
     private void onCircleExit(MouseEvent event) {
         circle.setCursor(Cursor.DEFAULT);
             circleHoldSound.stop();
-            if(event.isPrimaryButtonDown() && !success) {
+            if(event.isPrimaryButtonDown() && !circleSuccess) {
                 circleHoldTimer.stop();
                 blackScreen();
             }
@@ -71,14 +76,14 @@ public class TestController {
     @FXML
     private void onCirclePressed() {
         circleHoldSound.play();
-        success = false;
+        circleSuccess = false;
         circleHoldTimer.playFromStart();
     }
     @FXML
-    private void onCircleReleased(Event event) {
+    private void onCircleReleased() {
         circleHoldSound.stop();
         circleHoldTimer.stop();
-        if (!success) {
+        if (!circleSuccess) {
             blackScreen();
         }
     }
@@ -99,6 +104,8 @@ public class TestController {
     }
     @FXML
     private void onSquarePressed(MouseEvent event) {
+        squareSuccess = false;
+        squareDragTimer.playFromStart();
         squareMoveSegments[0] = event.getSceneX();
         squareMoveSegments[1] = event.getSceneY();
         squareMoveSegments[2] = square.getTranslateX();
@@ -126,11 +133,22 @@ public class TestController {
         double dist = horizontal ? Math.abs(dx) : Math.abs(dy);
 
         if (dist >= square.getWidth()) {
-            scoreSound.play();
-            score++;
-            scoreLabel.setText("Pontos: " + score);
+            score();
+            square.setTranslateX(0);
+            square.setTranslateY(0);
             positionShapesRandomly();
             squareDragEnabled = false;
+            squareSuccess = true;
+        }
+    }
+    @FXML
+    private void onSquareReleased() {
+        squareDragTimer.stop();
+        if(square.getTranslateX() != 0 || square.getTranslateY() != 0) {
+            blackScreen();
+        }
+        if(!squareSuccess) {
+            blackScreen();
         }
     }
     //Square behavior - end
@@ -141,14 +159,16 @@ public class TestController {
         }
         errorSound.play();
         blackOverlay.setVisible(true);
-        blackScreenTimer.setOnFinished(e -> {
-            blackOverlay.setVisible(false);
-            positionShapesRandomly();
-        });
         blackScreenTimer.play();
     }
 
-
+    @FXML
+    private void onOutOfBoundsClick(MouseEvent event) {
+        if(event.getTarget() instanceof Circle || event.getTarget() instanceof Rectangle) {
+            return;
+        }
+        blackScreen();
+    }
 
     private void positionShapesRandomly() {
         double areaWidth = innerPane.getMaxWidth();
@@ -173,6 +193,7 @@ public class TestController {
         circle.setLayoutY(circleY);
         square.setLayoutX(squareX);
         square.setLayoutY(squareY);
+
     }
 
     private boolean isAtCorrectDistance(double cx, double sx) {
@@ -186,5 +207,11 @@ public class TestController {
         boolean checkTwo = sx - cx  >= positiveGap;
 
         return checkOne == checkTwo;
+    }
+
+    private void score() {
+        scoreSound.play();
+        score++;
+        scoreLabel.setText("Pontos: " + score);
     }
 }
