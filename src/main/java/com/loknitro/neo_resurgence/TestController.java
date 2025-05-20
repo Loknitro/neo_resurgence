@@ -4,7 +4,6 @@ import javafx.animation.*;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -19,10 +18,9 @@ import java.util.Random;
 
 public class TestController {
 
-    double[] init = new double[4];
+    double[] squareMoveSegments = new double[4];
     boolean horizontal = false;
     boolean squareDragEnabled = true;
-    boolean squareDirectionDefined = false;
     private final AudioClip errorSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/erou.mp3")).toExternalForm());
     private final AudioClip scoreSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/point.mp3")).toExternalForm());
     private final AudioClip circleHoldSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/circle_hold.wav")).toExternalForm());
@@ -42,6 +40,7 @@ public class TestController {
     private final Random random = new Random();
     private int score = 0;
 
+    //TODO:Implement squareDragTimer
     private static final PauseTransition squareDragTimer = new PauseTransition(Duration.seconds(1.5));
     private static final PauseTransition circleHoldTimer = new PauseTransition(Duration.seconds(3));
     private static final PauseTransition blackScreenTimer = new PauseTransition(Duration.seconds(3));
@@ -100,32 +99,32 @@ public class TestController {
     }
     @FXML
     private void onSquarePressed(MouseEvent event) {
-        init[0] = event.getSceneX();
-        init[1] = event.getSceneY();
-        init[2] = square.getTranslateX();
-        init[3] = square.getTranslateY();
+        squareMoveSegments[0] = event.getSceneX();
+        squareMoveSegments[1] = event.getSceneY();
+        squareMoveSegments[2] = square.getTranslateX();
+        squareMoveSegments[3] = square.getTranslateY();
         horizontal = false;
         squareDragEnabled = true;
-        squareDirectionDefined = false;
     }
     @FXML
     private void onSquareDrag(MouseEvent event) {
         if(!squareDragEnabled) {return;}
-        double dx = event.getSceneX() - init[0];
-        double dy = event.getSceneY() - init[1];
+        double dx = event.getSceneX() - squareMoveSegments[0];
+        double dy = event.getSceneY() - squareMoveSegments[1];
 
         if(Math.abs(dx) > Math.abs(dy)) {
             horizontal = true;
         }
 
         if(horizontal) {
-            square.setTranslateX(init[2] + dx);
+            square.setTranslateX(squareMoveSegments[2] + dx);
         }
         else {
-            square.setTranslateY(init[3] + dy);
+            square.setTranslateY(squareMoveSegments[3] + dy);
         }
 
         double dist = horizontal ? Math.abs(dx) : Math.abs(dy);
+
         if (dist >= square.getWidth()) {
             scoreSound.play();
             score++;
@@ -152,25 +151,23 @@ public class TestController {
 
 
     private void positionShapesRandomly() {
-        double areaWidth = innerPane.getPrefWidth();
-        double areaHeight = innerPane.getPrefHeight();
+        double areaWidth = innerPane.getMaxWidth();
+        double areaHeight = innerPane.getMaxHeight();
         double circleRadius = circle.getRadius();
         double squareSize = square.getWidth();
-
-
-
 
         double circleX;
         double circleY;
         double squareX;
         double squareY;
-        //do {
+
+        do {
             circleX = random.nextDouble() * (areaWidth - circleRadius) + circleRadius;
             circleY = random.nextDouble() * (areaHeight - circleRadius) + circleRadius;
             squareX = random.nextDouble() * (areaWidth - squareSize);
             squareY = random.nextDouble() * (areaHeight - squareSize);
 
-        //} while (isOverlapping(circleX, circleY, circleRadius, squareX, squareY, squareSize));
+        } while (isAtCorrectDistance(circleX, squareX));
 
         circle.setLayoutX(circleX);
         circle.setLayoutY(circleY);
@@ -178,16 +175,16 @@ public class TestController {
         square.setLayoutY(squareY);
     }
 
-    private boolean isOverlapping(double cx, double cy, double cr, double sx, double sy, double ss) {
-        //Calculates minimum distance between shapes to never overlap
-//        double sqCenterX = sx + ss / 2;
-//        double sqCenterY = sy + ss / 2;
-//
-//        double dx = cx - sqCenterX;
-//        double dy = cy - sqCenterY;
-//        double distance = Math.sqrt(dx * dx + dy * dy);
-//        double minDistance = cr + ss;
-//
-//        return distance < minDistance;
+    private boolean isAtCorrectDistance(double cx, double sx) {
+        double extraDistance = 25; //Maybe a good option for customization later.
+
+        //These gaps reference the distance based on the shapes sizes and their position
+        double positiveGap = square.getWidth() * 2 + extraDistance - circle.getRadius();
+        double negativeGap = square.getWidth() * -2 - extraDistance - circle.getRadius();
+
+        boolean checkOne =  sx - cx <= negativeGap;
+        boolean checkTwo = sx - cx  >= positiveGap;
+
+        return checkOne == checkTwo;
     }
 }

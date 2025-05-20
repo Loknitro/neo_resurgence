@@ -8,11 +8,11 @@
 
 <AnchorPane prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loknitro.neo_resurgence.TestController">
     <children>
-        <AnchorPane fx:id="innerPane" layoutX="130.0" layoutY="130.0" maxHeight="820.0" maxWidth="1660.0" minHeight="820.0" minWidth="1660.0" prefHeight="820.0" prefWidth="1660.0" scaleShape="false" style="-fx-border-color: black; -fx-border-width: 1px;" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="130.0">
+        <AnchorPane fx:id="innerPane" layoutX="130.0" layoutY="130.0" maxHeight="820.0" maxWidth="1660.0" minHeight="820.0" minWidth="1660.0" pickOnBounds="false" prefHeight="820.0" prefWidth="1660.0" scaleShape="false" style="-fx-border-color: black; -fx-border-width: 1px;" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="130.0">
             <children>
-
-                <Rectangle fx:id="square" arcHeight="5.0" arcWidth="5.0" fill="BLUE" height="100.0" layoutX="700.0" onMouseDragged="#onSquareDrag" onMouseEntered="#onSquareEnter" onMouseExited="#onSquareExit" onMousePressed="#onSquarePressed" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="100.0" />
                 <Circle fx:id="circle" fill="RED" layoutX="750.0" layoutY="50.0" onMouseEntered="#onCircleEnter" onMouseExited="#onCircleExit" onMousePressed="#onCirclePressed" onMouseReleased="#onCircleReleased" radius="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
+      
+                <Rectangle fx:id="square" arcHeight="5.0" arcWidth="5.0" fill="BLUE" height="100.0" layoutX="301.0" layoutY="525.0" onMouseDragged="#onSquareDrag" onMouseEntered="#onSquareEnter" onMouseExited="#onSquareExit" onMousePressed="#onSquarePressed" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="100.0" />
             </children>
         </AnchorPane>
 
