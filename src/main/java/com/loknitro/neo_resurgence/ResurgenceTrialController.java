@@ -25,6 +25,7 @@ public class ResurgenceTrialController {
     private final AudioClip circleHoldSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/circle_hold.wav")).toExternalForm());
     private boolean circleSuccess = false;
     private boolean squareSuccess = false;
+    private boolean squareHoldExceeded = false;
 
     @FXML
     private AnchorPane blackOverlay;
@@ -39,6 +40,8 @@ public class ResurgenceTrialController {
     private Label scoreLabel;
     private final Random random = new Random();
     private int score = 0;
+
+    private static final PauseTransition testTimer = new PauseTransition(Duration.minutes(30));
     private static final PauseTransition squareDragTimer = new PauseTransition(Duration.seconds(1));
     private static final PauseTransition circleHoldTimer = new PauseTransition(Duration.seconds(3));
     private static final PauseTransition blackScreenTimer = new PauseTransition(Duration.seconds(3));
@@ -59,9 +62,12 @@ public class ResurgenceTrialController {
         });
         squareDragTimer.setOnFinished(e -> {
             if (!squareSuccess) {
+                squareHoldExceeded = true;
+                squareDragEnabled = false;
                 blackScreen();
             }
         });
+        testTimer.play();
     }
     //Circle behavior - start
     @FXML
@@ -104,6 +110,7 @@ public class ResurgenceTrialController {
     }
     @FXML
     private void onSquarePressed(MouseEvent event) {
+        squareHoldExceeded = false;
         squareSuccess = false;
         squareDragTimer.playFromStart();
         squareMoveSegments[0] = event.getSceneX();
@@ -144,10 +151,7 @@ public class ResurgenceTrialController {
     @FXML
     private void onSquareReleased() {
         squareDragTimer.stop();
-        if(square.getTranslateX() != 0 || square.getTranslateY() != 0) {
-            blackScreen();
-        }
-        if(!squareSuccess) {
+        if(!squareSuccess && !squareHoldExceeded) {
             blackScreen();
         }
     }
