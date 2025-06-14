@@ -5,7 +5,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loknitro.neo_resurgence.ResultScreenController">
    <children>
       <Text fill="#37b224" layoutX="539.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TESTE CONCLUÍDO" textAlignment="CENTER" wrappingWidth="841.13671875">
@@ -13,7 +12,7 @@
             <Font size="96.0" />
          </font>
       </Text>
-      <Button layoutX="893.0" layoutY="677.0" mnemonicParsing="false" prefHeight="96.0" prefWidth="134.0" text="Exportar Resultado" textAlignment="CENTER" visible="false" wrapText="true">
+      <Button fx:id="btnExport" layoutX="893.0" layoutY="677.0" mnemonicParsing="false" onAction="#exportCSV" prefHeight="96.0" prefWidth="134.0" text="Exportar Resultado" textAlignment="CENTER" wrapText="true">
          <font>
             <Font name="Arial" size="20.0" />
          </font>

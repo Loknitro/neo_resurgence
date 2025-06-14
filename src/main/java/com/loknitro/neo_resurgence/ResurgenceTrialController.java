@@ -1,11 +1,9 @@
 package com.loknitro.neo_resurgence;
 
 import javafx.animation.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
@@ -27,7 +25,7 @@ public class ResurgenceTrialController {
     private int actionCounter = 1;
     double[] squareMoveSegments = new double[4];
     boolean horizontal = false;
-    boolean squareDragEnabled = true;
+    boolean squareDragEnabled = false;
     private final AudioClip errorSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/erou.mp3")).toExternalForm());
     private final AudioClip scoreSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/point.mp3")).toExternalForm());
     private final AudioClip circleHoldSound = new AudioClip(Objects.requireNonNull(getClass().getResource("sounds/circle_hold.wav")).toExternalForm());
@@ -95,7 +93,7 @@ public class ResurgenceTrialController {
     private void onCirclePressed() {
         if (actionCounter >= 27) {
            actionCounter++;
-           registerAction(false, "Círculo", "Tentou interagir com Círculo em R3.");
+           registerAction(false, "Círculo", "Tentou interagir com Círculo em RT.");
            blackScreen();
            return;
         }
@@ -144,7 +142,7 @@ public class ResurgenceTrialController {
         }
         if(actionCounter >= 27) {
             actionCounter++;
-            registerAction(false, "Quadrado", "Tentou interagir com Quadrado em R3.");
+            registerAction(false, "Quadrado", "Tentou interagir com Quadrado em RT.");
             blackScreen();
             return;
         }
@@ -222,8 +220,13 @@ public class ResurgenceTrialController {
         square.setTranslateX(0);
         square.setTranslateY(0);
         if (actionCounter == 37) {
+            actionsTaken.add(String.format("O TESTE FOI REALIZADO EM %.2f!", testTimer.getCurrentTime().toSeconds()));
+            testTimer.stop();
             try {
-                Parent resultRoot = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("result-screen.fxml")));
+                FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("result-screen.fxml")));
+                Parent resultRoot = loader.load();
+                ResultScreenController resultScreenController = loader.getController();
+                resultScreenController.getData(actionsTaken);
                 Stage stage = (Stage) innerPane.getScene().getWindow();
                 stage.setScene(new javafx.scene.Scene(resultRoot));
             }
