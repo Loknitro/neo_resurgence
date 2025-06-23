@@ -22,7 +22,7 @@ import java.util.Random;
 
 
 public class ResurgenceTrialController {
-    private int actionCounter = 1;
+    private int actionCounter = 0;
     double[] squareMoveSegments = new double[4];
     boolean horizontal = false;
     boolean squareDragEnabled = false;
@@ -49,9 +49,9 @@ public class ResurgenceTrialController {
     private List<String> actionsTaken;
 
     private static final PauseTransition testTimer = new PauseTransition(Duration.minutes(30));
-    private static final PauseTransition squareDragTimer = new PauseTransition(Duration.seconds(1));
-    private static final PauseTransition circleHoldTimer = new PauseTransition(Duration.seconds(3));
-    private static final PauseTransition blackScreenTimer = new PauseTransition(Duration.seconds(3));
+    private static final PauseTransition squareDragTimer = new PauseTransition(Duration.seconds(15));
+    private static final PauseTransition circleHoldTimer = new PauseTransition(Duration.seconds(.5));
+    private static final PauseTransition blackScreenTimer = new PauseTransition(Duration.seconds(.5));
     @FXML
     private AnchorPane innerPane;
 
@@ -91,13 +91,13 @@ public class ResurgenceTrialController {
     }
     @FXML
     private void onCirclePressed() {
-        if (actionCounter >= 27) {
+        if (actionCounter >= 26) {
            actionCounter++;
            registerAction(false, "Círculo", "Tentou interagir com Círculo em RT.");
            blackScreen();
            return;
         }
-        if(actionCounter >= 13) {
+        if(actionCounter >= 12) {
             actionCounter++;
             registerAction(false, "Círculo", "Tentou interagir com Círculo em R2.");
             blackScreen();
@@ -140,7 +140,7 @@ public class ResurgenceTrialController {
             blackScreen();
             return;
         }
-        if(actionCounter >= 27) {
+        if(actionCounter >= 25) {
             actionCounter++;
             registerAction(false, "Quadrado", "Tentou interagir com Quadrado em RT.");
             blackScreen();
@@ -212,6 +212,7 @@ public class ResurgenceTrialController {
         if(event.getTarget() instanceof Circle || event.getTarget() instanceof Rectangle) {
             return;
         }
+        actionCounter++;
         registerAction(false, "Tela", "Clique fora de objetos interativos.");
         blackScreen();
     }
