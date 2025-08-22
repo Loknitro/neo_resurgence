@@ -22,6 +22,8 @@ import java.util.Random;
 
 
 public class ResurgenceTrialController {
+    boolean circleS1 = false;
+    boolean squareS1 = false;
     private int actionCounter = 0;
     double[] squareMoveSegments = new double[4];
     boolean horizontal = false;
@@ -50,8 +52,8 @@ public class ResurgenceTrialController {
 
     private static final PauseTransition testTimer = new PauseTransition(Duration.minutes(30));
     private static final PauseTransition squareDragTimer = new PauseTransition(Duration.seconds(15));
-    private static final PauseTransition circleHoldTimer = new PauseTransition(Duration.seconds(.5));
-    private static final PauseTransition blackScreenTimer = new PauseTransition(Duration.seconds(.5));
+    private static final PauseTransition circleHoldTimer = new PauseTransition(Duration.seconds(1.8));
+    private static final PauseTransition blackScreenTimer = new PauseTransition(Duration.seconds(1));
     @FXML
     private AnchorPane innerPane;
 
@@ -91,18 +93,12 @@ public class ResurgenceTrialController {
     }
     @FXML
     private void onCirclePressed() {
-        if (actionCounter >= 26) {
-           actionCounter++;
-           registerAction(false, "Círculo", "Tentou interagir com Círculo em RT.");
-           blackScreen();
-           return;
-        }
-        if(actionCounter >= 12) {
-            actionCounter++;
-            registerAction(false, "Círculo", "Tentou interagir com Círculo em R2.");
-            blackScreen();
-            return;
-        }
+        /*
+        actionCounter++;
+        blackScreen();
+        return;
+        Comportamento em se o círculo for S1 na parte de R2
+        */
         actionCounter++;
         circleHoldSound.play();
         circleSuccess = false;
@@ -113,7 +109,6 @@ public class ResurgenceTrialController {
         circleHoldSound.stop();
         circleHoldTimer.stop();
         if (!circleSuccess) {
-            registerAction(false, "Círculo", "Soltou antes do tempo.");
             blackScreen();
         }
     }
