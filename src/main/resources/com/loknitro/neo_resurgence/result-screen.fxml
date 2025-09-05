@@ -5,19 +5,19 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loknitro.neo_resurgence.ResultScreenController">
+<AnchorPane fx:id="resultPane" maxHeight="1080.0" maxWidth="1920.0" minHeight="1080.0" minWidth="1920.0" prefHeight="1080.0" prefWidth="1920.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loknitro.neo_resurgence.ResultScreenController">
    <children>
-      <Text fill="#37b224" layoutX="539.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TESTE CONCLUÍDO" textAlignment="CENTER" wrappingWidth="841.13671875">
+      <Text fill="#37b224" layoutX="539.0" layoutY="193.0" strokeType="OUTSIDE" strokeWidth="0.0" text="TESTE CONCLUÍDO" textAlignment="CENTER" wrappingWidth="841.13671875" AnchorPane.bottomAnchor="863.3125" AnchorPane.leftAnchor="539.0" AnchorPane.rightAnchor="539.86328125" AnchorPane.topAnchor="89.40625">
          <font>
             <Font size="96.0" />
          </font>
       </Text>
-      <Button fx:id="btnExport" layoutX="893.0" layoutY="677.0" mnemonicParsing="false" onAction="#exportCSV" prefHeight="96.0" prefWidth="134.0" text="Exportar Resultado" textAlignment="CENTER" wrapText="true">
+      <Button fx:id="btnExport" layoutX="893.0" layoutY="677.0" mnemonicParsing="false" onAction="#exportCSV" prefHeight="85.0" prefWidth="200.0" text="Exportar Resultado" textAlignment="CENTER" visible="false" wrapText="true" AnchorPane.bottomAnchor="318.0" AnchorPane.leftAnchor="893.0" AnchorPane.rightAnchor="827.0" AnchorPane.topAnchor="677.0">
          <font>
             <Font name="Arial" size="20.0" />
          </font>
       </Button>
-      <Text layoutX="262.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Retire-se e peça ao aplicador para verificar seus resultados. Obrigado pela atenção!" textAlignment="CENTER" wrappingWidth="1343.3076171875">
+      <Text layoutX="262.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Fim de experimento. Por favor, chame o experimentador!" textAlignment="CENTER" wrappingWidth="1343.3076171875" AnchorPane.bottomAnchor="553.623046875" AnchorPane.leftAnchor="262.0" AnchorPane.rightAnchor="314.6923828125" AnchorPane.topAnchor="382.0">
          <font>
             <Font size="54.0" />
          </font>

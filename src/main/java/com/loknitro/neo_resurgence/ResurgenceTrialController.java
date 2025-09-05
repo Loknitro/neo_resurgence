@@ -4,7 +4,7 @@ import javafx.animation.*;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
-import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
@@ -22,9 +22,23 @@ import java.util.Random;
 
 
 public class ResurgenceTrialController {
-    boolean circleS1 = false;
-    boolean squareS1 = false;
-    private int actionCounter = 0;
+    private boolean circleExit;
+    public void setRng(boolean rng) {
+        isRng = rng;
+    }
+
+    private final Random rand = new Random();
+    private boolean onR1;
+    private boolean onR2;
+    private boolean onRT;
+    boolean isRng;
+    int r1ActionCounter = 0;
+    int r2ActionCounter = 0;
+
+    int rtActionCounter = 0;
+
+    int r1drawn = 0;
+    int r2drawn = 0;
     double[] squareMoveSegments = new double[4];
     boolean horizontal = false;
     boolean squareDragEnabled = false;
@@ -34,6 +48,7 @@ public class ResurgenceTrialController {
     private boolean circleSuccess = false;
     private boolean squareSuccess = false;
     private boolean squareHoldExceeded = false;
+    private static final PauseTransition latencyTimer = new PauseTransition(Duration.minutes(10));
 
     @FXML
     private AnchorPane blackOverlay;
@@ -51,7 +66,7 @@ public class ResurgenceTrialController {
     private List<String> actionsTaken;
 
     private static final PauseTransition testTimer = new PauseTransition(Duration.minutes(30));
-    private static final PauseTransition squareDragTimer = new PauseTransition(Duration.seconds(15));
+    private static final PauseTransition squareDragTimer = new PauseTransition(Duration.seconds(3));
     private static final PauseTransition circleHoldTimer = new PauseTransition(Duration.seconds(1.8));
     private static final PauseTransition blackScreenTimer = new PauseTransition(Duration.seconds(1));
     @FXML
@@ -60,55 +75,68 @@ public class ResurgenceTrialController {
     @FXML
     public void initialize() {
         actionsTaken = new ArrayList<>();
+        resurgenceDistribution();
+
+        latencyTimer.play();
+
         positionShapesRandomly();
         blackScreenTimer.setOnFinished(e -> {
             blackOverlay.setVisible(false);
             positionShapesRandomly();
         });
         circleHoldTimer.setOnFinished(e -> {
-            registerAction(true, "Círculo", "Sucesso normal.");
-            circleSuccess = true;
-            score();
-            positionShapesRandomly();
+            if(onR2 || onRT) {
+                circleSuccess = true;
+                writeAction("Círculo", "Pressionar", "Erro", "1", "0");
+                registerAction();
+                blackScreen();
+            }
+            else {
+                circleSuccess = true;
+                score();
+                writeAction("Círculo", "Pressionar", "Acerto", "1", "0");
+                registerAction();
+                positionShapesRandomly();
+            }
         });
         squareDragTimer.setOnFinished(e -> {
             if (!squareSuccess) {
                 squareHoldExceeded = true;
                 squareDragEnabled = false;
+                writeAction("Quadrado", "Arrastar Insf.", "Erro", "0", "1");
+                registerAction();
                 blackScreen();
             }
         });
-        testTimer.play();
+        testTimer.playFromStart();
     }
     //Circle behavior - start
+    @FXML
+    private void onCirclePressed() {
+        circleExit = false;
+        circleSuccess = false;
+        circleHoldSound.play();
+        circleHoldTimer.playFromStart();
+    }
     @FXML
     private void onCircleExit(MouseEvent event) {
         circle.setCursor(Cursor.DEFAULT);
         circleHoldSound.stop();
         if(event.isPrimaryButtonDown() && !circleSuccess) {
-            registerAction(false, "Círculo", "Tentou arrastar o círculo (comportamento do quadrado).");
+            circleExit = true;
             circleHoldTimer.stop();
+            writeAction("Círculo", "Pressionar Insf.", "Erro", "1", "0");
+            registerAction();
             blackScreen();
         }
-    }
-    @FXML
-    private void onCirclePressed() {
-        /*
-        actionCounter++;
-        blackScreen();
-        return;
-        Comportamento em se o círculo for S1 na parte de R2
-        */
-        actionCounter++;
-        circleHoldSound.play();
-        circleSuccess = false;
-        circleHoldTimer.playFromStart();
     }
     @FXML
     private void onCircleReleased(MouseEvent event) {
         circleHoldSound.stop();
         circleHoldTimer.stop();
-        if (!circleSuccess) {
+        if (!circleSuccess && !circleExit) {
+            writeAction("Círculo", "Pressionar Insf.", "Erro", "1", "0");
+            registerAction();
             blackScreen();
         }
     }
@@ -129,19 +157,6 @@ public class ResurgenceTrialController {
     }
     @FXML
     private void onSquarePressed(MouseEvent event) {
-        if (actionCounter < 13) {
-            actionCounter++;
-            registerAction(false, "Quadrado", "Tentou interagir com Quadrado em R1.");
-            blackScreen();
-            return;
-        }
-        if(actionCounter >= 25) {
-            actionCounter++;
-            registerAction(false, "Quadrado", "Tentou interagir com Quadrado em RT.");
-            blackScreen();
-            return;
-        }
-        actionCounter++;
         squareHoldExceeded = false;
         squareSuccess = false;
         squareDragTimer.playFromStart();
@@ -172,22 +187,29 @@ public class ResurgenceTrialController {
         double dist = horizontal ? Math.abs(dx) : Math.abs(dy);
 
         if (dist >= square.getWidth()) {
-            score();
-            positionShapesRandomly();
-            squareDragEnabled = false;
-            squareSuccess = true;
-            registerAction(true, "Quadrado", "Sucesso normal.");
+            squareDragTimer.stop();
+            if (onR1 || onRT) {
+                squareSuccess = true;
+                squareDragEnabled = false;
+                writeAction("Quadrado", "Arrastar", "Erro", "0", "1");
+                registerAction();
+                blackScreen();
+            } else {
+                score();
+                squareDragEnabled = false;
+                squareSuccess = true;
+                writeAction("Quadrado", "Arrastar", "Acerto", "0", "1");
+                registerAction();
+                positionShapesRandomly();
+            }
         }
     }
     @FXML
-    private void onSquareReleased() {
+    private void onSquareReleased(MouseEvent event) {
         squareDragTimer.stop();
         if(!squareSuccess && !squareHoldExceeded) {
-            if (Math.abs(square.getTranslateX()) >= 15 || Math.abs(square.getTranslateY()) >= 15) {
-                registerAction(false, "Quadrado", "Não arrastou o suficiente.");
-            }
-            else
-                registerAction(false, "Quadrado", "Tentou segurar o quadrado(comportamento do círculo).");
+            writeAction("Quadrado", "Arrastar Insf.", "Erro", "0", "1");
+            registerAction();
             blackScreen();
         }
     }
@@ -204,27 +226,32 @@ public class ResurgenceTrialController {
 
     @FXML
     private void onOutOfBoundsClick(MouseEvent event) {
-        if(event.getTarget() instanceof Circle || event.getTarget() instanceof Rectangle) {
+        if(event.getTarget() instanceof Circle || event.getTarget() instanceof Rectangle || blackOverlay.isVisible()) {
             return;
         }
-        actionCounter++;
-        registerAction(false, "Tela", "Clique fora de objetos interativos.");
+        writeAction("Tela", "Toque", "Erro", "0", "0");
+        registerAction();
         blackScreen();
     }
 
     private void positionShapesRandomly() {
         square.setTranslateX(0);
         square.setTranslateY(0);
-        if (actionCounter == 37) {
-            actionsTaken.add(String.format("O TESTE FOI REALIZADO EM %.2f!", testTimer.getCurrentTime().toSeconds()));
+        if (rtActionCounter == 12) {
+            actionsTaken.add("");
+            actionsTaken.add(String.format("Teste concluído em %02d:%05.2f minutos.",(int)testTimer.getCurrentTime().toMinutes(), testTimer.getCurrentTime().toSeconds()));
             testTimer.stop();
             try {
+
                 FXMLLoader loader = new FXMLLoader(Objects.requireNonNull(getClass().getResource("result-screen.fxml")));
-                Parent resultRoot = loader.load();
+                Scene scene = new Scene(loader.load());
                 ResultScreenController resultScreenController = loader.getController();
-                resultScreenController.getData(actionsTaken);
+                resultScreenController.setData(actionsTaken);
                 Stage stage = (Stage) innerPane.getScene().getWindow();
-                stage.setScene(new javafx.scene.Scene(resultRoot));
+
+                stage.setScene(scene);
+                stage.setFullScreen(true);
+                stage.setResizable(false);
             }
             catch (IOException e) {
                 e.printStackTrace();
@@ -256,9 +283,8 @@ public class ResurgenceTrialController {
     }
 
     private boolean isAtCorrectDistance(double cx, double sx) {
-        double extraDistance = 25; //Maybe a good option for customization later.
+        double extraDistance = square.getWidth()/2;
 
-        //These gaps reference the distance based on the shapes sizes and their position
         double positiveGap = square.getWidth() * 2 + extraDistance - circle.getRadius();
         double negativeGap = square.getWidth() * -2 - extraDistance - circle.getRadius();
 
@@ -274,7 +300,89 @@ public class ResurgenceTrialController {
         scoreLabel.setText("Pontos: " + score);
     }
 
-    private void registerAction(boolean success, String object, String description) {
-        actionsTaken.add(String.format("%s - Objeto: %s. Ação tomada em %.2f segundos: %s", success ? "ACERTO" : "ERRO", object, testTimer.getCurrentTime().toSeconds(), description));
+    private void registerAction() {
+        resurgenceCounter();
+        resurgenceDistribution();
+    }
+
+    private void writeAction(String object, String interaction, String result, String s1, String s2) {
+        String latency = String.format("%05.2f",latencyTimer.getCurrentTime().toSeconds());
+        latencyTimer.stop();
+        latencyTimer.playFromStart();
+        String time = String.format("%02d:%05.2f",(int)testTimer.getCurrentTime().toMinutes(), testTimer.getCurrentTime().toSeconds());
+        String phase;
+        if (onR1) {
+            phase = "R1";
+        }else if (onR2) {
+            phase = "R2";
+        }else
+            phase = "RT";
+        actionsTaken.add(String.format("%s;%s;%s;%s;%s;%s;%s;%s", phase, object, interaction, time, latency, result, s1, s2));
+    }
+
+    private void resurgenceDistribution() {
+        //unpredictable
+        if (isRng) {
+            if (r1ActionCounter == 12 && r2ActionCounter == 12) {
+                onR1 = false;
+                onR2 = false;
+                onRT = true;
+                return;
+            }
+
+            if (r1ActionCounter == 12 && r2ActionCounter < 12) {
+                onR1 = false;
+                onR2 = true;
+                return;
+            }
+            if (r2ActionCounter == 12 && r1ActionCounter < 12) {
+                onR1 = true;
+                onR2 = false;
+                return;
+            }
+
+            int probability = 40 + r1drawn * 10 - r2drawn * 10;
+            int rng = rand.nextInt(81);
+
+            if (rng > probability ) {
+                r2drawn = 0;
+                r1drawn++;
+                onR1 = true;
+                onR2 = false;
+            }
+            else {
+                r1drawn = 0;
+                r2drawn++;
+                onR1 = false;
+                onR2 = true;
+            }
+        }
+        //predictable
+        else {
+            if (r1ActionCounter == 12 && r2ActionCounter == 12) {
+                onR1 = false;
+                onR2 = false;
+                onRT = true;
+            } else if (r1ActionCounter == 12 && r2ActionCounter < 12) {
+                onR1 = false;
+                onR2 = true;
+                onRT = false;
+            } else {
+                onR1 = true;
+                onR2 = false;
+                onRT = false;
+            }
+        }
+    }
+
+    private void resurgenceCounter () {
+        if (onR1) {
+            r1ActionCounter++;
+        }
+        else if (onR2) {
+            r2ActionCounter++;
+        }
+        else
+            rtActionCounter++;
     }
 }

@@ -10,9 +10,9 @@
     <children>
         <AnchorPane fx:id="innerPane" layoutX="130.0" layoutY="130.0" maxHeight="820.0" maxWidth="1660.0" minHeight="820.0" minWidth="1660.0" pickOnBounds="false" prefHeight="820.0" prefWidth="1660.0" scaleShape="false" AnchorPane.bottomAnchor="130.0" AnchorPane.leftAnchor="130.0" AnchorPane.rightAnchor="130.0" AnchorPane.topAnchor="130.0">
             <children>
-                <Circle fx:id="circle" fill="RED" layoutX="50.0" layoutY="50.0" onMouseEntered="#onCircleEnter" onMouseExited="#onCircleExit" onMousePressed="#onCirclePressed" onMouseReleased="#onCircleReleased" radius="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
+                <Circle fx:id="circle" fill="RED" layoutX="780.0" layoutY="410.0" onMouseEntered="#onCircleEnter" onMouseExited="#onCircleExit" onMousePressed="#onCirclePressed" onMouseReleased="#onCircleReleased" radius="50.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" />
       
-                <Rectangle fx:id="square" arcHeight="5.0" arcWidth="5.0" fill="BLUE" height="100.0" layoutX="477.0" layoutY="253.0" onMouseDragged="#onSquareDrag" onMouseEntered="#onSquareEnter" onMouseExited="#onSquareExit" onMousePressed="#onSquarePressed" onMouseReleased="#onSquareReleased" pickOnBounds="true" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="100.0" />
+                <Rectangle fx:id="square" arcHeight="5.0" arcWidth="5.0" fill="BLUE" height="100.0" layoutX="830.0" layoutY="360.0" onMouseDragged="#onSquareDrag" onMouseEntered="#onSquareEnter" onMouseExited="#onSquareExit" onMousePressed="#onSquarePressed" onMouseReleased="#onSquareReleased" pickOnBounds="true" stroke="BLACK" strokeType="INSIDE" strokeWidth="5.0" width="100.0" />
             </children>
         </AnchorPane>
 

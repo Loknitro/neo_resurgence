@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,94 +12,138 @@
 <?import javafx.scene.text.TextFlow?>
 
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
-   <top>
-      <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true" BorderPane.alignment="CENTER">
-         <image>
-            <Image url="@images/puc-goias-horizontal.png" />
-         </image>
-      </ImageView>
-   </top>
-   <center>
-      <SplitPane dividerPositions="0.5" orientation="VERTICAL" prefHeight="200.0" prefWidth="160.0" BorderPane.alignment="CENTER">
-        <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+<AnchorPane fx:id="parentPane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.loknitro.neo_resurgence.MainMenuController">
+   <children>
+      <BorderPane fx:id="mainMenu" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0">
+         <right>
+            <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </right>
+         <left>
+            <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+         </left>
+         <bottom>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextFlow layoutY="14.0" prefHeight="63.0" prefWidth="398.0" AnchorPane.bottomAnchor="61.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Delineamento: ">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Renato Vinícius de Olveira, Francisco Humberto Nunes Oliveira, Lorismario Ernesto Simonassi" textAlignment="CENTER">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </TextFlow>
-                  <TextFlow layoutY="78.0" prefHeight="60.0" prefWidth="598.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Automação: ">
-                           <font>
-                              <Font name="System Bold" size="18.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leonardo Vecchi de Souza">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Text>
-                     </children>
-                  </TextFlow>
+                  <Button fx:id="r1Button" focusTraversable="false" layoutX="82.0" layoutY="58.0" mnemonicParsing="false" onAction="#r1ButtonOnAction" prefHeight="85.0" prefWidth="250.0" text="Modo Imprevisível" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="80.0" AnchorPane.rightAnchor="470.0" AnchorPane.topAnchor="58.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+                  <Button fx:id="r2Button" focusTraversable="false" layoutX="457.0" layoutY="58.0" mnemonicParsing="false" onAction="#r2ButtonOnAction" prefHeight="85.0" prefWidth="250.0" text="Modo Previsível" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="470.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="58.0">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="100.0" prefWidth="160.0">
+         </bottom>
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextFlow layoutX="1.0" layoutY="31.0" prefHeight="30.0" prefWidth="397.0" textAlignment="CENTER">
+                  <AnchorPane layoutX="1.0" minHeight="0.0" minWidth="0.0" prefHeight="154.0" prefWidth="398.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bem vindo ao Recovery! " textAlignment="CENTER">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Text>
+                        <TextFlow layoutY="14.0" prefHeight="63.0" prefWidth="398.0" AnchorPane.bottomAnchor="61.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="14.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Delineamento: ">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Renato Vinícius de Olveira, Francisco Humberto Nunes Oliveira, Lorismario Ernesto Simonassi" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </TextFlow>
+                        <TextFlow layoutY="78.0" prefHeight="60.0" prefWidth="598.0" textAlignment="CENTER" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="94.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Automação: ">
+                                 <font>
+                                    <Font name="System Bold" size="18.0" />
+                                 </font>
+                              </Text>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Leonardo Vecchi de Souza">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </TextFlow>
                      </children>
-                  </TextFlow>
-                  <TextFlow layoutY="69.0" prefHeight="67.0" prefWidth="398.0" textAlignment="CENTER" AnchorPane.bottomAnchor="1.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0">
+                  </AnchorPane>
+                  <AnchorPane layoutX="-1.0" layoutY="143.0" minHeight="0.0" minWidth="0.0" prefHeight="120.0" prefWidth="402.0">
                      <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Por favor, escolha uma das seguintes opções:">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                        </Text>
+                        <TextFlow layoutX="40.0" prefHeight="61.0" prefWidth="322.0" textAlignment="CENTER" AnchorPane.bottomAnchor="59.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="40.0" AnchorPane.topAnchor="0.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Bem Vindo ao Recovery, um software experimental para investigar ressurgência comportamental em diferentes condições!" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </TextFlow>
+                        <TextFlow layoutY="75.0" prefHeight="43.0" prefWidth="402.0" textAlignment="CENTER" AnchorPane.bottomAnchor="2.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="75.0">
+                           <children>
+                              <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Escolha uma das opções para iniciar o processo:" textAlignment="CENTER">
+                                 <font>
+                                    <Font size="16.0" />
+                                 </font>
+                              </Text>
+                           </children>
+                        </TextFlow>
                      </children>
-                  </TextFlow>
+                  </AnchorPane>
                </children>
             </AnchorPane>
-        </items>
-      </SplitPane>
-   </center>
-   <right>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </right>
-   <left>
-      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </left>
-   <bottom>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button layoutX="82.0" layoutY="58.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="250.0" text="Modo Imprevisível" AnchorPane.bottomAnchor="58.0" AnchorPane.leftAnchor="80.0" AnchorPane.topAnchor="58.0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-            <Button layoutX="457.0" layoutY="58.0" mnemonicParsing="false" prefHeight="84.0" prefWidth="250.0" text="Modo Previsível" AnchorPane.bottomAnchor="58.0" AnchorPane.rightAnchor="80.0" AnchorPane.topAnchor="58.0">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Button>
-         </children>
-      </AnchorPane>
-   </bottom>
-</BorderPane>
+         </center>
+         <top>
+            <AnchorPane prefHeight="150.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+               <children>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="169.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="12.0" AnchorPane.leftAnchor="169.0" AnchorPane.rightAnchor="431.0" AnchorPane.topAnchor="12.0">
+                     <image>
+                        <Image url="@images/puc-goias-horizontal.png" />
+                     </image>
+                  </ImageView>
+                  <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="426.0" layoutY="20.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="29.147727966308594" AnchorPane.leftAnchor="426.0" AnchorPane.rightAnchor="174.0" AnchorPane.topAnchor="20.0">
+                     <image>
+                        <Image url="@images/laec.jpg" />
+                     </image>
+                  </ImageView>
+               </children>
+            </AnchorPane>
+         </top>
+      </BorderPane>
+      <BorderPane fx:id="introduction" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="647.0" prefWidth="861.0" visible="false">
+         <center>
+            <AnchorPane prefHeight="200.0" prefWidth="744.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" layoutX="208.0" layoutY="7.0" prefHeight="335.0" prefWidth="446.0" text="Sua tarefa será tocar com a ponta do dedo no quadrado azul e arrastar a figura para a direção que preferir ou tocar e manter a ponta do dedo pressionando o círculo vermelho para ganhar pontos. Sua tarefa é ganhar o maior número de pontos que conseguir. " textAlignment="CENTER" textOverrun="CLIP" wrapText="true">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </center>
+         <bottom>
+            <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Button fx:id="nextScreenButton" layoutX="331.0" layoutY="58.0" mnemonicParsing="false" onAction="#nextScreen" prefHeight="85.0" prefWidth="200.0" text="CLIQUE AQUI PARA                  CONTINUAR!" textAlignment="CENTER" wrapText="true" AnchorPane.bottomAnchor="57.0" AnchorPane.leftAnchor="331.0" AnchorPane.rightAnchor="330.0" AnchorPane.topAnchor="58.0" />
+               </children>
+            </AnchorPane>
+         </bottom>
+         <top>
+            <AnchorPane prefHeight="91.0" prefWidth="861.0" BorderPane.alignment="CENTER">
+               <children>
+                  <Label alignment="CENTER" contentDisplay="CENTER" layoutX="89.0" layoutY="37.0" prefHeight="17.0" prefWidth="683.0" text="INSTRUÇÕES" textFill="RED" wrapText="true" AnchorPane.bottomAnchor="37.0" AnchorPane.leftAnchor="89.0" AnchorPane.rightAnchor="89.0" AnchorPane.topAnchor="37.0">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+               </children>
+            </AnchorPane>
+         </top>
+      </BorderPane>
+   </children>
+</AnchorPane>
